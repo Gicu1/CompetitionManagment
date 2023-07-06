@@ -9,6 +9,22 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<form method="get">
+    <label for="teamId">Team:</label>
+    <select id="teamId" name="id" onchange="location.href = this.value ? '/Players/Index/' + this.value : '/Players/Index'">
+        <option value="">All</option>
+        @foreach (var item in ViewBag.Teams)
+        {
+            var selected = item.Value == ViewContext.RouteData.Values["id"]?.ToString();
+            <option value="@item.Value" selected="@selected">@item.Text</option>
+        }
+    </select>
+</form>
+
+
+
+
 <table class="table">
     <thead>
         <tr>
@@ -50,4 +66,9 @@
         </tr>
 }
     </tbody>
+    <tr>
+        <td>
+            <a asp-controller="Team" asp-action="Index">Back to Teams</a>
+        </td>
+    </tr>
 </table>

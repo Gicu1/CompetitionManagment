@@ -69,19 +69,49 @@ namespace CompetitionManagment.Controllers
 
 
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int? id)
         {
-            var team = _context.Teams.Find(id);
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var team = await _context.Teams.FindAsync(id);
             if (team == null)
             {
                 return NotFound();
             }
-            _context.Teams.Remove(team);
-            _context.SaveChanges();
-            return RedirectToAction("Index");
+
+            return View(team);
         }
 
-        
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var team = await _context.Teams.FindAsync(id);
+            if (team != null)
+            {
+                // Delete or disassociate all players associated with the team
+                var players = _context.Players.Where(p => p.TeamId == id);
+                foreach (var player in players)
+                {
+                    // To delete the player:
+                    // _context.Players.Remove(player);
+
+                    // To disassociate the player from the team:
+                    player.TeamId = null;
+                }
+
+                _context.Teams.Remove(team);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
 
 
     }

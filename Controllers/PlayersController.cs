@@ -25,6 +25,7 @@ namespace CompetitionManagment.Controllers
             if (id == null)
             {
                 var allPlayers = _context.Players.Include(p => p.Team);
+                ViewBag.Teams = new SelectList(_context.Teams, "Id", "Name");
                 return View(await allPlayers.ToListAsync());
             }
             else
@@ -32,9 +33,11 @@ namespace CompetitionManagment.Controllers
                 var playersInTeam = _context.Players
                     .Where(p => p.TeamId == id)
                     .Include(p => p.Team);
+                ViewBag.Teams = new SelectList(_context.Teams, "Id", "Name");
                 return View(await playersInTeam.ToListAsync());
             }
         }
+
 
         // GET: Players/Details/5
         public async Task<IActionResult> Details(int? id)
