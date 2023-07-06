@@ -43,7 +43,6 @@ namespace CompetitionManagment.Controllers
             {
                 return NotFound();
             }
-
             var player = await _context.Players
                 .Include(p => p.Team)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -51,14 +50,14 @@ namespace CompetitionManagment.Controllers
             {
                 return NotFound();
             }
-
             return View(player);
         }
 
         // GET: Players/Create
         public IActionResult Create()
         {
-            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Id");
+            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Name");
+
             return View();
         }
 
@@ -73,7 +72,7 @@ namespace CompetitionManagment.Controllers
             {
                 _context.Add(player);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { id = player.TeamId });
             }
             ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Id", player.TeamId);
             return View(player);
@@ -92,7 +91,7 @@ namespace CompetitionManagment.Controllers
             {
                 return NotFound();
             }
-            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Id", player.TeamId);
+            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Name");
             return View(player);
         }
 
@@ -126,7 +125,7 @@ namespace CompetitionManagment.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { id = player.TeamId });
             }
             ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Id", player.TeamId);
             return View(player);
@@ -167,7 +166,7 @@ namespace CompetitionManagment.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { id = player.TeamId });
         }
 
         private bool PlayerExists(int id)
