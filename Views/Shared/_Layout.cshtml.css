@@ -46,3 +46,16 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
 }
+
+.row {
+    display: flex;
+    align-items: flex-start;
+}
+
+.col-md-4 {
+    flex: 1;
+}
+
+.players-list {
+    width: 200px;
+}
