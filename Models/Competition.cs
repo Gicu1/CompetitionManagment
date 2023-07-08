@@ -39,4 +39,7 @@ public partial class Competition
     [ForeignKey("CompetitionId")]
     [InverseProperty("Competitions")]
     public virtual ICollection<Team> Teams { get; set; } = new List<Team>();
+
+    [NotMapped] // This property will not be mapped to the database
+    public List<Team> AllTeams { get; set; } = new List<Team>();
 }

@@ -1,21 +1,94 @@
-﻿using CompetitionManagment.Models;
+﻿using CompetitionManagment.Data;
+using CompetitionManagment.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CompetitionManagment.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly CompetitionManagementContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(CompetitionManagementContext context)
         {
-            _logger = logger;
+            _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Teams(int competitionId)
         {
-            return View();
+            Competition? competition = await _context.Competitions
+                .Include(c => c.Teams)
+                .FirstOrDefaultAsync(c => c.Id == competitionId);
+
+            List<Team> allTeams = await _context.Teams.ToListAsync();
+            if (competition == null)
+            {
+                return NotFound();
+            }
+
+            List<Team> participatingTeams = competition.Teams.ToList();
+            List<Team> availableTeams = allTeams.Except(participatingTeams).ToList();
+
+            competition.AllTeams = availableTeams;
+
+            return View(competition);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddTeam(int competitionId, int teamId)
+        {
+            Competition? competition = await _context.Competitions
+                .Include(c => c.Teams)
+                .FirstOrDefaultAsync(c => c.Id == competitionId);
+
+            Team? teamToAdd = await _context.Teams.FindAsync(teamId);
+
+            if (competition == null || teamToAdd == null)
+            {
+                return NotFound();
+            }
+            
+            if (competition.Teams.Contains(teamToAdd))
+            {
+                return BadRequest("The team is already participating in the competition.");
+            }
+
+            competition.Teams.Add(teamToAdd);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Teams", new { competitionId });
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteTeam(int competitionId, int teamId)
+        {
+            Competition? competition = await _context.Competitions
+                .Include(c => c.Teams)
+                .FirstOrDefaultAsync(c => c.Id == competitionId);
+
+            Team? teamToDelete = competition.Teams.FirstOrDefault(t => t.Id == teamId);
+
+            if (competition != null && teamToDelete != null)
+            {
+                competition.Teams.Remove(teamToDelete);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Teams", new { competitionId });
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            List<Competition> competitions = await _context.Competitions
+                .Include(c => c.Teams)
+                .ToListAsync();
+
+            return View(competitions);
         }
 
         public IActionResult Privacy()
@@ -28,5 +101,6 @@ namespace CompetitionManagment.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }

@@ -33,6 +33,14 @@ public partial class Game
     [Unicode(false)]
     public string? Stadium { get; set; }
 
+    [StringLength(255)]
+    [Unicode(false)]
+    public string? Team1Name { get; set; }
+
+    [StringLength(255)]
+    [Unicode(false)]
+    public string? Team2Name { get; set; }
+
     [ForeignKey("CompetitionId")]
     [InverseProperty("Games")]
     public virtual Competition? Competition { get; set; }
