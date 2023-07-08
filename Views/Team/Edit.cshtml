@@ -8,8 +8,8 @@
 
 <h4>Team</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="row" style="display:flex">
+    <div class="col-md-4" >
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
@@ -38,7 +38,18 @@
             </div>
         </form>
     </div>
+    <h3>Players of This Team</h3>
+    <div class="players-list">
+        <ul>
+            @foreach (var player in Model.Players)
+            {
+                <li>@player.FirstName @player.LastName</li>
+            }
+        </ul>
+    </div>
 </div>
+
+
 
 <div>
     <a asp-action="Index">Back to List</a>

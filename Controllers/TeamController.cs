@@ -43,13 +43,16 @@ namespace CompetitionManagment.Controllers
 
         public IActionResult Edit(int id)
         {
-            var team = _context.Teams.Find(id);
+            //var team = _context.Teams.Find(id);
+            var team = _context.Teams.Include(t => t.Players).FirstOrDefault(t => t.Id == id);
+
             if (team == null)
             {
                 return NotFound();
             }
             return View(team);
         }
+
         [HttpPost]
         public IActionResult Edit(Team team)
         {
@@ -93,7 +96,6 @@ namespace CompetitionManagment.Controllers
             var team = await _context.Teams.FindAsync(id);
             if (team != null)
             {
-                // Delete or disassociate all players associated with the team
                 var players = _context.Players.Where(p => p.TeamId == id);
                 foreach (var player in players)
                 {
