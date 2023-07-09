@@ -19,6 +19,24 @@ namespace CompetitionManagment.Controllers
             _context = context;
         }
 
+        public async Task<IActionResult> ViewPlayers(int? id)
+        {
+            if (id == null)
+            {
+                var allPlayers = _context.Players.Include(p => p.Team);
+                ViewBag.Teams = new SelectList(_context.Teams, "Id", "Name");
+                return View(await allPlayers.ToListAsync());
+            }
+            else
+            {
+                var playersInTeam = _context.Players
+                    .Where(p => p.TeamId == id)
+                    .Include(p => p.Team);
+                ViewBag.Teams = new SelectList(_context.Teams, "Id", "Name");
+                return View(await playersInTeam.ToListAsync());
+            }
+        }
+
         // GET: Players
         public async Task<IActionResult> Index(int? id)
         {

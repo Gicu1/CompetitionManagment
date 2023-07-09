@@ -84,6 +84,8 @@ public partial class CompetitionManagementContext : DbContext
         modelBuilder.Entity<Team>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__TEAM__3214EC279E2E117C");
+
+            entity.ToTable("TEAM", tb => tb.HasTrigger("TR_TEAM_DELETE_GAME"));
         });
 
         OnModelCreatingPartial(modelBuilder);
