@@ -70,18 +70,16 @@ namespace CompetitionManagment.Controllers
         }
 
         // GET: Competitions/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? competitionId)
         {
-            if (id == null || _context.Competitions == null)
+            Competition? competition = await _context.Competitions
+                .Include(c => c.Teams)
+                .FirstOrDefaultAsync(c => c.Id == competitionId);
+            if (competitionId == null || _context.Competitions == null || competition == null)
             {
                 return NotFound();
             }
 
-            var competition = await _context.Competitions.FindAsync(id);
-            if (competition == null)
-            {
-                return NotFound();
-            }
             ViewData["CompetitionType"] = new SelectList(_context.Competitiontypes, "Id", "Id", competition.CompetitionType);
             return View(competition);
         }
@@ -116,7 +114,7 @@ namespace CompetitionManagment.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
             }
             ViewData["CompetitionType"] = new SelectList(_context.Competitiontypes, "Id", "Id", competition.CompetitionType);
             return View(competition);
