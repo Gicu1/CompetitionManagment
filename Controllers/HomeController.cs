@@ -49,7 +49,8 @@ namespace CompetitionManagment.Controllers
 
             if (competition == null || teamToAdd == null)
             {
-                return NotFound();
+                //return NotFound();
+                return RedirectToAction("Teams", new { competitionId });
             }
             
             if (competition.Teams.Contains(teamToAdd))

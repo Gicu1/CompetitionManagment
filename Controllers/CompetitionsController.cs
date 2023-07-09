@@ -63,7 +63,7 @@ namespace CompetitionManagment.Controllers
             {
                 _context.Add(competition);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
             }
             ViewData["CompetitionType"] = new SelectList(_context.Competitiontypes, "Id", "Id", competition.CompetitionType);
             return View(competition);
@@ -123,16 +123,19 @@ namespace CompetitionManagment.Controllers
         }
 
         // GET: Competitions/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? competitionId)
         {
-            if (id == null || _context.Competitions == null)
+            Competition? competition = await _context.Competitions
+                .Include(c => c.Teams)
+                .FirstOrDefaultAsync(c => c.Id == competitionId);
+            if (competitionId == null || _context.Competitions == null)
             {
                 return NotFound();
             }
 
-            var competition = await _context.Competitions
-                .Include(c => c.CompetitionTypeNavigation)
-                .FirstOrDefaultAsync(m => m.Id == id);
+//            var competition = await _context.Competitions
+//                .Include(c => c.CompetitionTypeNavigation)
+//                .FirstOrDefaultAsync(m => m.Id == id);
             if (competition == null)
             {
                 return NotFound();
@@ -157,7 +160,7 @@ namespace CompetitionManagment.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Home");
         }
 
         private bool CompetitionExists(int id)
