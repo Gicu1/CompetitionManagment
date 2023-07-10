@@ -22,8 +22,12 @@ namespace CompetitionManagment.Controllers
         // GET: Games
         public async Task<IActionResult> Index()
         {
-            var competitionManagementContext = _context.Games.Include(g => g.Competition).Include(g => g.Team1).Include(g => g.Team2);
-            return View(await competitionManagementContext.ToListAsync());
+			
+			var competitionManagementContext = _context.Games.Include(g => g.Competition).Include(g => g.Team1).Include(g => g.Team2);
+			ViewData["CompetitionId"] = new SelectList(_context.Competitions, "Id", "Name");
+			ViewData["Team1Id"] = new SelectList(_context.Teams, "Id", "Name");
+			ViewData["Team2Id"] = new SelectList(_context.Teams, "Id", "Name");
+			return View(await competitionManagementContext.ToListAsync());
         }
 
         // GET: Games/Details/5
@@ -43,16 +47,18 @@ namespace CompetitionManagment.Controllers
             {
                 return NotFound();
             }
-
-            return View(game);
+			ViewData["CompetitionId"] = new SelectList(_context.Competitions, "Id", "Name", game.CompetitionId);
+			ViewData["Team1Id"] = new SelectList(_context.Teams, "Id", "Name", game.Team1Id);
+			ViewData["Team2Id"] = new SelectList(_context.Teams, "Id", "Name", game.Team2Id);
+			return View(game);
         }
 
         // GET: Games/Create
         public IActionResult Create()
         {
-            ViewData["CompetitionId"] = new SelectList(_context.Competitions, "Id", "Id");
-            ViewData["Team1Id"] = new SelectList(_context.Teams, "Id", "Id");
-            ViewData["Team2Id"] = new SelectList(_context.Teams, "Id", "Id");
+            ViewData["CompetitionId"] = new SelectList(_context.Competitions, "Id", "Name");
+            ViewData["Team1Id"] = new SelectList(_context.Teams, "Id", "Name");
+            ViewData["Team2Id"] = new SelectList(_context.Teams, "Id", "Name");
             return View();
         }
 
@@ -63,15 +69,18 @@ namespace CompetitionManagment.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Team1Id,Team2Id,Team1Score,Team2Score,CompetitionId,Date,Stadium,Team1Name,Team2Name")] Game game)
         {
+            ViewData["CompetitionId"] = new SelectList(_context.Competitions, "Id", "Id", game.CompetitionId);
+            ViewData["Team1Id"] = new SelectList(_context.Teams, "Id", "Id", game.Team1Id);
+            ViewData["Team2Id"] = new SelectList(_context.Teams, "Id", "Id", game.Team2Id);
             if (ModelState.IsValid)
             {
+                game.Team1Name = game.Team1Id.ToString();
+                game.Team2Name = game.Team2Id.ToString();
                 _context.Add(game);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CompetitionId"] = new SelectList(_context.Competitions, "Id", "Id", game.CompetitionId);
-            ViewData["Team1Id"] = new SelectList(_context.Teams, "Id", "Id", game.Team1Id);
-            ViewData["Team2Id"] = new SelectList(_context.Teams, "Id", "Id", game.Team2Id);
+            
             return View(game);
         }
 
@@ -88,9 +97,9 @@ namespace CompetitionManagment.Controllers
             {
                 return NotFound();
             }
-            ViewData["CompetitionId"] = new SelectList(_context.Competitions, "Id", "Id", game.CompetitionId);
-            ViewData["Team1Id"] = new SelectList(_context.Teams, "Id", "Id", game.Team1Id);
-            ViewData["Team2Id"] = new SelectList(_context.Teams, "Id", "Id", game.Team2Id);
+            ViewData["CompetitionId"] = new SelectList(_context.Competitions, "Id", "Name", game.CompetitionId);
+            ViewData["Team1Id"] = new SelectList(_context.Teams, "Id", "Name", game.Team1Id);
+            ViewData["Team2Id"] = new SelectList(_context.Teams, "Id", "Name", game.Team2Id);
             return View(game);
         }
 
@@ -149,8 +158,10 @@ namespace CompetitionManagment.Controllers
             {
                 return NotFound();
             }
-
-            return View(game);
+			ViewData["CompetitionId"] = new SelectList(_context.Competitions, "Id", "Name", game.CompetitionId);
+			ViewData["Team1Id"] = new SelectList(_context.Teams, "Id", "Name", game.Team1Id);
+			ViewData["Team2Id"] = new SelectList(_context.Teams, "Id", "Name", game.Team2Id);
+			return View(game);
         }
 
         // POST: Games/Delete/5

@@ -38,9 +38,17 @@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.CompetitionType)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CompetitionTypeNavigation.Id)
+        <dd class="col-sm-10">
+            @if (Model.CompetitionTypeNavigation != null)
+            {
+                @Html.DisplayFor(model => model.CompetitionTypeNavigation.Name)
+            }
+            else
+            {
+                <span class="text-danger">Competition Type Not Found</span>
+            }
         </dd>
+
     </dl>
     
     <form asp-action="Delete">

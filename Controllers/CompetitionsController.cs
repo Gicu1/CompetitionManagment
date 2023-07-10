@@ -48,13 +48,10 @@ namespace CompetitionManagment.Controllers
         // GET: Competitions/Create
         public IActionResult Create()
         {
-            ViewData["CompetitionType"] = new SelectList(_context.Competitiontypes, "Id", "Id");
+            ViewData["CompetitionType"] = new SelectList(_context.Competitiontypes, "Id", "Name");
             return View();
         }
 
-        // POST: Competitions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,StartDate,EndDate,Location,CompetitionType")] Competition competition)
@@ -62,12 +59,19 @@ namespace CompetitionManagment.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(competition);
+                if (competition.StartDate > competition.EndDate)
+                {
+                    ModelState.AddModelError("EndDate", "End Date must be after Start Date.");
+                    ViewData["CompetitionType"] = new SelectList(_context.Competitiontypes, "Id", "Name", competition.CompetitionType);
+                    return View(competition);
+                }
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Home");
             }
-            ViewData["CompetitionType"] = new SelectList(_context.Competitiontypes, "Id", "Id", competition.CompetitionType);
+            ViewData["CompetitionType"] = new SelectList(_context.Competitiontypes, "Id", "Name", competition.CompetitionType);
             return View(competition);
         }
+
 
         // GET: Competitions/Edit/5
         public async Task<IActionResult> Edit(int? competitionId)
@@ -80,7 +84,7 @@ namespace CompetitionManagment.Controllers
                 return NotFound();
             }
 
-            ViewData["CompetitionType"] = new SelectList(_context.Competitiontypes, "Id", "Id", competition.CompetitionType);
+            ViewData["CompetitionType"] = new SelectList(_context.Competitiontypes, "Id", "Name");
             return View(competition);
         }
 
@@ -95,28 +99,19 @@ namespace CompetitionManagment.Controllers
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            if (competition.StartDate > competition.EndDate)
             {
-                try
-                {
-                    _context.Update(competition);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CompetitionExists(competition.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                ModelState.AddModelError("EndDate", "End Date must be after Start Date.");
+                ViewData["CompetitionType"] = new SelectList(_context.Competitiontypes, "Id", "Name", competition.CompetitionType);
+                return View(competition);
+            }
+            if (ModelState.IsValid)
+            {  
+                _context.Update(competition);
+                await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Home");
             }
-            ViewData["CompetitionType"] = new SelectList(_context.Competitiontypes, "Id", "Id", competition.CompetitionType);
+            ViewData["CompetitionType"] = new SelectList(_context.Competitiontypes, "Id", "Name", competition.CompetitionType);
             return View(competition);
         }
 
@@ -124,7 +119,7 @@ namespace CompetitionManagment.Controllers
         public async Task<IActionResult> Delete(int? competitionId)
         {
             Competition? competition = await _context.Competitions
-                .Include(c => c.Teams)
+                .Include(c => c.CompetitionTypeNavigation)
                 .FirstOrDefaultAsync(c => c.Id == competitionId);
             if (competitionId == null || _context.Competitions == null)
             {
@@ -138,7 +133,6 @@ namespace CompetitionManagment.Controllers
             {
                 return NotFound();
             }
-
             return View(competition);
         }
 

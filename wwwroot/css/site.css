@@ -44,9 +44,11 @@ body {
 
     .card-footer .btn {
         margin-top: 5px;
-        margin-left: 10px;
         white-space: normal; /* Allow multiple lines of text in buttons */
         max-width: 100%; /* Ensure button doesn't exceed parent width */
+        display: flex;
+        align-content: center;
+        justify-content: center;
     }
 
 .card-location {
@@ -68,6 +70,12 @@ body {
 .btn-primary {
     margin-top: 10px;
     margin-bottom: 10px;
+}
+    
+.btn-group {
+    display: flex;
+    align-content: center;
+    justify-content: center;
 }
 
 

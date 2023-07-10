@@ -37,7 +37,7 @@ namespace CompetitionManagment.Controllers
 
             return View(competition);
         }
-
+        
         [HttpPost]
         public async Task<IActionResult> AddTeam(int competitionId, int teamId)
         {
@@ -72,9 +72,21 @@ namespace CompetitionManagment.Controllers
                 .Include(c => c.Teams)
                 .FirstOrDefaultAsync(c => c.Id == competitionId);
 
-            Team? teamToDelete = competition.Teams.FirstOrDefault(t => t.Id == teamId);
+			if (competition == null )
+			{
+				//return NotFound();
+				return RedirectToAction("Teams", new { competitionId });
+			}
 
-            if (competition != null && teamToDelete != null)
+			Team? teamToDelete = competition.Teams.FirstOrDefault(t => t.Id == teamId);
+
+			if (teamToDelete == null)
+			{
+				//return NotFound();
+				return RedirectToAction("Teams", new { competitionId });
+			}
+
+			if (competition != null && teamToDelete != null)
             {
                 competition.Teams.Remove(teamToDelete);
                 await _context.SaveChangesAsync();
