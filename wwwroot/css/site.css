@@ -16,3 +16,58 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.card-deck {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.card {
+    width: calc(33.33% - 20px); /* Adjust the width of the cards */
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-body {
+    margin-bottom: 40px;
+}
+
+.card-footer {
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+    .card-footer .btn {
+        margin-top: 5px;
+        margin-left: 10px;
+        white-space: normal; /* Allow multiple lines of text in buttons */
+        max-width: 100%; /* Ensure button doesn't exceed parent width */
+    }
+
+.card-location {
+    margin-top: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Optional: Adjust card size */
+.card-deck .card {
+    width: 350px; /* Adjust the desired width for the cards */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.btn-primary {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+

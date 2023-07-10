@@ -36,19 +36,19 @@ public partial class CompetitionManagementContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__COMPETIT__3214EC27C1B5A6A3");
 
-            entity.HasOne(d => d.CompetitionTypeNavigation).WithMany(p => p.Competitions).HasConstraintName("FK__COMPETITI__Compe__4D94879B");
+            entity.HasOne(d => d.CompetitionTypeNavigation).WithMany(p => p.Competitions)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("FK_COMPETITION_CompetitionType_COMPETITIONTYPE_ID");
 
             entity.HasMany(d => d.Teams).WithMany(p => p.Competitions)
                 .UsingEntity<Dictionary<string, object>>(
                     "Teamcompetition",
                     r => r.HasOne<Team>().WithMany()
                         .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__TEAMCOMPE__TeamI__5CD6CB2B"),
+                        .HasConstraintName("FK_TEAMCOMPETITION_TeamID_TEAM_ID"),
                     l => l.HasOne<Competition>().WithMany()
                         .HasForeignKey("CompetitionId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__TEAMCOMPE__Compe__5BE2A6F2"),
+                        .HasConstraintName("FK_TEAMCOMPETITION_CompetitionID_COMPETITION_ID"),
                     j =>
                     {
                         j.HasKey("CompetitionId", "TeamId").HasName("PK_TeamCompetition");
@@ -67,18 +67,22 @@ public partial class CompetitionManagementContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__GAME__3214EC2724452D1E");
 
-            entity.HasOne(d => d.Competition).WithMany(p => p.Games).HasConstraintName("FK__GAME__Competitio__52593CB8");
+            entity.HasOne(d => d.Competition).WithMany(p => p.Games)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("FK_GAME_CompetitionID_COMPETITION_ID");
 
-            entity.HasOne(d => d.Team1).WithMany(p => p.GameTeam1s).HasConstraintName("FK__GAME__Team1ID__5070F446");
+            entity.HasOne(d => d.Team1).WithMany(p => p.GameTeam1s).HasConstraintName("FK_GAME_Team1ID_TEAM_ID");
 
-            entity.HasOne(d => d.Team2).WithMany(p => p.GameTeam2s).HasConstraintName("FK__GAME__Team2ID__5165187F");
+            entity.HasOne(d => d.Team2).WithMany(p => p.GameTeam2s).HasConstraintName("FK_GAME_Team2ID_TEAM_ID");
         });
 
         modelBuilder.Entity<Player>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__PLAYER__3214EC27AC49A529");
 
-            entity.HasOne(d => d.Team).WithMany(p => p.Players).HasConstraintName("FK__PLAYER__TeamID__5535A963");
+            entity.HasOne(d => d.Team).WithMany(p => p.Players)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("FK_PLAYER_TeamID_TEAM_ID");
         });
 
         modelBuilder.Entity<Team>(entity =>

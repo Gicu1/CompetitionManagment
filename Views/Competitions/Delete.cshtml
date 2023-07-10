@@ -36,7 +36,7 @@
             @Html.DisplayFor(model => model.Location)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CompetitionTypeNavigation)
+            @Html.DisplayNameFor(model => model.CompetitionType)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.CompetitionTypeNavigation.Id)
@@ -46,6 +46,6 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Index" asp-controller="Home">Back Home</a>
     </form>
 </div>

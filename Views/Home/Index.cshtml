@@ -4,36 +4,30 @@
     ViewData["Title"] = "Home";
 }
 
-<style>
-    .card-deck {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        margin-bottom: 20px;
-    }
-
-    .card {
-        width: calc(25% - 20px);
-        margin-bottom: 20px;
-    }
-</style>
 
 <h1>Welcume to the Competition Management System!</h1>
 <div>
-    <a href="@Url.Action("Create", "Competitions")" class="btn btn-primary">Add Competition</a>
+    <a href="@Url.Action("Create", "Competitions")" class="btn btn-primary">Add Competition</a
 </div>
 
 <div class="card-deck">
     @foreach (var competition in Model)
     {
-        <div class="card" style="width: 18rem;">
+        <div class="card">
             <div class="card-body">
                 <h5 class="card-title">@competition.Name</h5>
                 <p class="card-text">Start Date: @competition.StartDate?.ToString("dd/MM/yyyy")</p>
                 <p class="card-text">End Date: @competition.EndDate?.ToString("dd/MM/yyyy")</p>
-                <p class="card-text">Location: @competition.Location</p>
-                <a href="@Url.Action("Teams", "Home", new { competitionId = competition.Id })" class="btn btn-primary">View Teams</a>
+                <div class="card-location">Location: @competition.Location</div> <!-- Wrap the location text in a separate div -->
+            </div>
+            <div class="card-footer">
+                <div class="btn-group">
+                    <a href="@Url.Action("Teams", "Home", new { competitionId = competition.Id })" class="btn btn-primary">View Teams</a>
+                    <a href="@Url.Action("Delete", "Competitions", new { competitionId = competition.Id })" class="btn btn-primary">Delete Competition</a>
+                    <a href="@Url.Action("Edit", "Competitions", new { competitionId = competition.Id })" class="btn btn-primary">Edit Competition</a>
+                </div>
             </div>
         </div>
     }
 </div>
+
