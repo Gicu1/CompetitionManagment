@@ -74,8 +74,8 @@ namespace CompetitionManagment.Controllers
             ViewData["Team2Id"] = new SelectList(_context.Teams, "Id", "Id", game.Team2Id);
             if (ModelState.IsValid)
             {
-                game.Team1Name = game.Team1Id.ToString();
-                game.Team2Name = game.Team2Id.ToString();
+                game.Team1Name = _context.Teams.Find(game.Team1Id).Name;
+                game.Team2Name = _context.Teams.Find(game.Team2Id).Name;
                 _context.Add(game);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -119,6 +119,8 @@ namespace CompetitionManagment.Controllers
             {
                 try
                 {
+                    game.Team1Name = _context.Teams.Find(game.Team1Id).Name;
+                    game.Team2Name = _context.Teams.Find(game.Team2Id).Name;
                     _context.Update(game);
                     await _context.SaveChangesAsync();
                 }

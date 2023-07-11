@@ -20,12 +20,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" class="form-control" />
+                <input asp-for="StartDate" class="form-control" id="startDateInput" />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" class="form-control" />
+                <input asp-for="EndDate" class="form-control" id="endDateInput" />
                 <span asp-validation-for="EndDate" class="text-danger" data-valmsg-for="EndDate" data-valmsg-replace="true"></span>
             </div>
             <div class="form-group">
@@ -48,6 +48,30 @@
 <div>
     <a asp-action="Index" asp-controller="Home">Back</a>
 </div>
+
+@{
+    var startDateValue = Model.StartDate?.ToString("yyyy-MM-dd");
+    if (startDateValue != null)
+    {
+        <text>
+            <script>
+                document.getElementById('startDateInput').value = '@startDateValue';
+            </script>
+        </text>
+    }
+}
+
+@{
+    var endDateValue = Model.EndDate?.ToString("yyyy-MM-dd");
+    if (endDateValue != null)
+    {
+        <text>
+            <script>
+                document.getElementById('endDateInput').value = '@endDateValue';
+            </script>
+        </text>
+    }
+}
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -18,6 +18,7 @@
                 <h5 class="card-title">@competition.Name</h5>
                 <p class="card-text">Start Date: @competition.StartDate?.ToString("dd/MM/yyyy")</p>
                 <p class="card-text">End Date: @competition.EndDate?.ToString("dd/MM/yyyy")</p>
+                <p class="card-text">Competition Type: @competition.CompetitionTypeNavigation.Name</p>
                 <div class="card-location">Location: @competition.Location</div> <!-- Wrap the location text in a separate div -->
             </div>
             <div class="card-footer">

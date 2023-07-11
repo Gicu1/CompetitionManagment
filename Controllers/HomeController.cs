@@ -1,6 +1,7 @@
 ﻿using CompetitionManagment.Data;
 using CompetitionManagment.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -99,7 +100,9 @@ namespace CompetitionManagment.Controllers
         {
             List<Competition> competitions = await _context.Competitions
                 .Include(c => c.Teams)
+                .Include(d => d.CompetitionTypeNavigation)
                 .ToListAsync();
+
 
             return View(competitions);
         }

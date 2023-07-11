@@ -30,7 +30,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="CreatedOn" class="control-label"></label>
-                <input asp-for="CreatedOn" class="form-control" type="date" max="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                <input asp-for="CreatedOn" class="form-control" type="date" max="@DateTime.Today.ToString("yyyy-MM-dd")" id="TeamCreationDate" />
                 <span asp-validation-for="CreatedOn" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -54,6 +54,18 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+@{
+    var OldCreatedOn = Model.CreatedOn?.ToString("yyyy-MM-dd");
+    if (OldCreatedOn != null)
+    {
+        <text>
+            <script>
+                document.getElementById('TeamCreationDate').value = '@OldCreatedOn';
+            </script>
+        </text>
+    }
+}
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
