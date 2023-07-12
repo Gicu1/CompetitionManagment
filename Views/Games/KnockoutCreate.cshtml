@@ -1,25 +1,26 @@
 ﻿@model CompetitionManagment.Models.Game
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "KnockoutCreate";
 }
 
-<h1>Create</h1>
+<h1>KnockoutCreate</h1>
 
 <h4>Game</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="KnockoutCreate">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <input asp-for="CompetitionId" class="form-control" readonly hidden />
+                <label asp-for="Team1Id" class="control-label"></label>
+                <select asp-for="Team1Id" class="form-control" asp-items="ViewBag.Team1Id"></select>
+                <span asp-validation-for="Team1Id" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input asp-for="Team1Id" class="form-control" readonly hidden />
-            </div>
-            <div class="form-group">
-                <input asp-for="Team2Id" class="form-control" readonly hidden />
+                <label asp-for="Team2Id" class="control-label"></label>
+                <select asp-for="Team2Id" class="form-control" asp-items="ViewBag.Team2Id"></select>
+                <span asp-validation-for="Team2Id" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Team1Score" class="control-label"></label>
@@ -32,6 +33,11 @@
                 <span asp-validation-for="Team2Score" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="CompetitionId" class="control-label"></label>
+                <input asp-for="CompetitionId" class="form-control" readonly />
+                <span asp-validation-for="CompetitionId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Date" class="control-label"></label>
                 <input asp-for="Date" class="form-control" />
                 <span asp-validation-for="Date" class="text-danger"></span>
@@ -42,6 +48,16 @@
                 <span asp-validation-for="Stadium" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Team1Name" class="control-label"></label>
+                <input asp-for="Team1Name" class="form-control" readonly />
+                <span asp-validation-for="Team1Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Team2Name" class="control-label"></label>
+                <input asp-for="Team2Name" class="form-control" readonly />
+                <span asp-validation-for="Team2Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
@@ -49,11 +65,5 @@
 </div>
 
 <div>
-    <a asp-action="Teams" asp-controller="Home" asp-route-competitionId="@Model.CompetitionId">Back to Teams</a>
+    <a asp-action="Index">Back to List</a>
 </div>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}

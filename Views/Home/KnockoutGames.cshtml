@@ -1,0 +1,36 @@
+﻿@model CompetitionManagment.Models.Competition
+
+@{
+    ViewData["Title"] = "Knockout Games";
+}
+
+<h1>Games for @Model.Name</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Team 1</th>
+            <th>Team 2</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var game in Model.Games)
+        {
+            <tr>
+                <td>@game.Team1Name</td>
+                <td>@game.Team2Name</td>
+                <td>
+                    <a class="btn btn-primary" href="@Url.Action("KnockoutEdit", "Games", new { id = game.Id })">Edit Game</a>
+                    <a class="btn btn-danger" href="@Url.Action("KnockoutDelete", "Games", new { id = game.Id })">Delete Game</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a class="btn btn-success" href="@Url.Action("KnockoutCreate", "Games", new { competitionId = Model.Id })">Create Game</a>
+
+<div>
+    <a asp-action="Teams" asp-controller="Home" asp-route-competitionId="@Model.Id">Back to Teams</a>
+</div>

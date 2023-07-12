@@ -81,7 +81,7 @@ namespace CompetitionManagment.Controllers
                 return RedirectToAction("Teams", new { competitionId });
             }
 
-            Team teamToDelete = competition.Teams.FirstOrDefault(t => t.Id == teamId);
+            Team? teamToDelete = competition.Teams.FirstOrDefault(t => t.Id == teamId);
 
             if (teamToDelete == null)
             {
@@ -91,7 +91,10 @@ namespace CompetitionManagment.Controllers
             // Delete all games where the team is either Team1 or Team2
             foreach (var game in teamToDelete.GameTeam1s.Concat(teamToDelete.GameTeam2s).ToList())
             {
-                _context.Games.Remove(game);
+                if (game.CompetitionId == competitionId)
+                {
+                    _context.Games.Remove(game);
+                }
             }
 
             competition.Teams.Remove(teamToDelete);
@@ -101,16 +104,54 @@ namespace CompetitionManagment.Controllers
         }
 
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            List<Competition> competitions = await _context.Competitions
+            var competitions = _context.Competitions
+                .Include(c => c.CompetitionTypeNavigation)
                 .Include(c => c.Teams)
-                .Include(d => d.CompetitionTypeNavigation)
-                .ToListAsync();
+                .ThenInclude(t => t.GameTeam1s)
+                .Include(c => c.Teams)
+                .ThenInclude(t => t.GameTeam2s)
+                .ToList();
 
+            foreach (var competition in competitions)
+            {
+                var teamScores = new List<TeamScore>();
+
+                foreach (var team in competition.Teams)
+                {
+                    int score;
+                    if (competition.CompetitionType == 1) // League
+                    {
+                        score = CalculateTeamScore(team, competition.Id);
+                    }
+                    else // Knockout
+                    {
+                        score = CalculateKnockoutTeamScore(team, competition.Id);
+                    }
+
+                    teamScores.Add(new TeamScore { Team = team, Score = score });
+                }
+
+                teamScores = teamScores.OrderByDescending(ts => ts.Score).ToList();
+                var winner = teamScores.FirstOrDefault();
+                if (winner != null && (teamScores.Count < 2 || winner.Score > teamScores[1].Score))
+                {
+                    competition.WinnerId = winner.Team.Id;
+                    competition.WinnerName = winner.Team.Name;
+                }
+                else
+                {
+                    competition.WinnerId = null;
+                    competition.WinnerName = "No winner";
+                }
+            }
+
+            _context.SaveChanges();
 
             return View(competitions);
         }
+
 
         public IActionResult LeagueGames(int competitionId)
         {
@@ -172,6 +213,71 @@ namespace CompetitionManagment.Controllers
                     else if (game.Team1Score == game.Team2Score)
                     {
                         score += 1; // The game ended in a draw
+                    }
+                }
+            }
+
+            return score;
+        }
+
+
+        public IActionResult KnockoutGames(int competitionId)
+        {
+            var competition = _context.Competitions
+                .Include(c => c.Games)
+                .Include(c => c.Teams)
+                .FirstOrDefault(c => c.Id == competitionId);
+
+            if (competition == null)
+            {
+                return NotFound();
+            }
+
+            return View(competition);
+        }
+
+
+        public IActionResult KnockoutLeaderboard(int competitionId)
+        {
+            var teams = _context.Teams
+                .Include(t => t.GameTeam1s)
+                .Include(t => t.GameTeam2s)
+                .Include(t => t.Competitions)
+                .Where(t => t.Competitions.Any(c => c.Id == competitionId))
+                .ToList();
+
+            var teamScores = new List<TeamScore>();
+
+            foreach (var team in teams)
+            {
+                var score = CalculateKnockoutTeamScore(team, competitionId);
+                teamScores.Add(new TeamScore { Team = team, Score = score });
+            }
+
+            teamScores = teamScores.OrderByDescending(ts => ts.Score).ToList();
+            ViewData["CompetitionId"] = competitionId;
+            return View(teamScores);
+        }
+
+        private int CalculateKnockoutTeamScore(Team team, int competitionId)
+        {
+            var games = team.GameTeam1s.Concat(team.GameTeam2s)
+                .Where(g => g.CompetitionId == competitionId)
+                .ToList();
+
+            int score = 0;
+
+            foreach (var game in games)
+            {
+                if (game.Team1Score.HasValue && game.Team2Score.HasValue)
+                {
+                    if (game.Team1Id == team.Id && game.Team1Score > game.Team2Score)
+                    {
+                        score += 1; // Team 1 won the game
+                    }
+                    else if (game.Team2Id == team.Id && game.Team2Score > game.Team1Score)
+                    {
+                        score += 1; // Team 2 won the game
                     }
                 }
             }

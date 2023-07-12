@@ -46,4 +46,10 @@ public partial class Competition
 
     [NotMapped] // This property will not be mapped to the database
     public List<Team> AllTeams { get; set; } = new List<Team>();
+
+    [NotMapped] // This property will not be mapped to the database
+    public int? WinnerId { get; set; }
+
+    [NotMapped] // This property will not be mapped to the database
+    public string WinnerName { get; set; }
 }

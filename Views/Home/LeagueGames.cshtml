@@ -44,11 +44,12 @@
                     <td>
                         @if (game != null)
                         {
-                            <a class="btn btn-primary" href="@Url.Action("Edit", "Games", new { id = game.Id })">Edit Game</a>
+                            <a class="btn btn-primary" href="@Url.Action("LeagueEdit", "Games", new { id = game.Id })">Edit Game</a>
+                            <a class="btn btn-danger" href="@Url.Action("LeagueDelete", "Games", new { id = game.Id })">Delete Game</a>
                         }
                         else
                         {
-                            <a class="btn btn-success" href="@Url.Action("Create", "Games", new { competitionId = Model.Id, team1Id = team1.Id, team2Id = team2.Id })">Create Game</a>
+                            <a class="btn btn-success" href="@Url.Action("LeagueCreate", "Games", new { competitionId = Model.Id, team1Id = team1.Id, team2Id = team2.Id })">Create Game</a>
                         }
                     </td>
                 </tr>

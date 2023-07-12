@@ -36,7 +36,7 @@
                 <label asp-for="CompetitionType" class="control-label"></label>
                 <select asp-for="CompetitionType" class="form-control" asp-items="ViewBag.CompetitionType"></select>
             </div>
-
+            <input type="hidden" asp-for="WinnerName" value="No Winner" />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

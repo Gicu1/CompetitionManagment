@@ -54,7 +54,7 @@ namespace CompetitionManagment.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,StartDate,EndDate,Location,CompetitionType")] Competition competition)
+        public async Task<IActionResult> Create([Bind("Id,Name,StartDate,EndDate,Location,CompetitionType,WinnerName")] Competition competition)
         {
             if (ModelState.IsValid)
             {
@@ -68,6 +68,21 @@ namespace CompetitionManagment.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Home");
             }
+            if (!ModelState.IsValid)
+            {
+                var modelStates = ModelState.Values.ToList();
+                foreach (var modelState in modelStates)
+                {
+                    foreach (var error in modelState.Errors)
+                    {
+                        // Log or display the error message
+                        Console.WriteLine(error.ErrorMessage);
+                    }
+                }
+            }
+
+
+
             ViewData["CompetitionType"] = new SelectList(_context.Competitiontypes, "Id", "Name", competition.CompetitionType);
             return View(competition);
         }
@@ -93,7 +108,7 @@ namespace CompetitionManagment.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartDate,EndDate,Location,CompetitionType")] Competition competition)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartDate,EndDate,Location,CompetitionType,WinnerName")] Competition competition)
         {
             if (id != competition.Id)
             {

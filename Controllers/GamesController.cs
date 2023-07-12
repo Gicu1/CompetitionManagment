@@ -54,7 +54,7 @@ namespace CompetitionManagment.Controllers
         }
 
         // GET: Games/Create
-        public IActionResult Create(int competitionId, int team1Id, int team2Id)
+        public IActionResult LeagueCreate(int competitionId, int team1Id, int team2Id)
         {
             var game = new Game
             {
@@ -78,7 +78,7 @@ namespace CompetitionManagment.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Team1Id,Team2Id,Team1Score,Team2Score,CompetitionId,Date,Stadium,Team1Name,Team2Name")] Game game)
+        public async Task<IActionResult> LeagueCreate([Bind("Id,Team1Id,Team2Id,Team1Score,Team2Score,CompetitionId,Date,Stadium,Team1Name,Team2Name")] Game game)
         {
             ViewData["CompetitionId"] = new SelectList(_context.Competitions, "Id", "Name", game.CompetitionId);
             ViewData["Team1Id"] = new SelectList(_context.Teams, "Id", "Name", game.Team1Id);
@@ -96,7 +96,7 @@ namespace CompetitionManagment.Controllers
         }
 
         // GET: Games/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> LeagueEdit(int? id)
         {
             if (id == null || _context.Games == null)
             {
@@ -120,7 +120,7 @@ namespace CompetitionManagment.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Team1Id,Team2Id,Team1Score,Team2Score,CompetitionId,Date,Stadium,Team1Name,Team2Name")] Game game)
+        public async Task<IActionResult> LeagueEdit(int id, [Bind("Id,Team1Id,Team2Id,Team1Score,Team2Score,CompetitionId,Date,Stadium,Team1Name,Team2Name")] Game game)
         {
             if (id != game.Id)
             {
@@ -197,6 +197,212 @@ namespace CompetitionManagment.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+
+
+        // GET: Games/KnockoutCreate
+        public IActionResult KnockoutCreate(int competitionId)
+        {
+            var competition = _context.Competitions.Include(c => c.Teams).FirstOrDefault(c => c.Id == competitionId);
+            if (competition == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["CompetitionId"] = competitionId;
+            ViewData["Team1Id"] = new SelectList(competition.Teams, "Id", "Name");
+            ViewData["Team2Id"] = new SelectList(competition.Teams, "Id", "Name");
+            return View();
+        }
+
+        // POST: Games/KnockoutCreate
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> KnockoutCreate([Bind("Id,Team1Id,Team2Id,Team1Score,Team2Score,CompetitionId,Date,Stadium")] Game game)
+        {
+            if (game.Team1Id == game.Team2Id)
+            {
+                ModelState.AddModelError(string.Empty, "A team cannot play against itself.");
+            }
+
+            var existingGame = _context.Games.FirstOrDefault(g =>
+                g.CompetitionId == game.CompetitionId &&
+                ((g.Team1Id == game.Team1Id && g.Team2Id == game.Team2Id) ||
+                 (g.Team1Id == game.Team2Id && g.Team2Id == game.Team1Id)));
+            if (existingGame != null)
+            {
+                ModelState.AddModelError(string.Empty, "A game between these two teams already exists.");
+            }
+
+            if (ModelState.IsValid)
+            {
+                game.Team1Name = _context.Teams.Find(game.Team1Id)?.Name;
+                game.Team2Name = _context.Teams.Find(game.Team2Id)?.Name;
+                _context.Add(game);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("KnockoutGames", "Home", new { competitionId = game.CompetitionId });
+            }
+
+            var competition = _context.Competitions.Include(c => c.Teams).FirstOrDefault(c => c.Id == game.CompetitionId);
+            if (competition == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["CompetitionId"] = game.CompetitionId;
+            ViewData["Team1Id"] = new SelectList(competition.Teams, "Id", "Name", game.Team1Id);
+            ViewData["Team2Id"] = new SelectList(competition.Teams, "Id", "Name", game.Team2Id);
+            return View(game);
+        }
+
+
+        // GET: Games/KnockoutEdit/5
+        public async Task<IActionResult> KnockoutEdit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var game = await _context.Games.FindAsync(id);
+            if (game == null)
+            {
+                return NotFound();
+            }
+
+            var competition = _context.Competitions.Include(c => c.Teams).FirstOrDefault(c => c.Id == game.CompetitionId);
+            if (competition == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["CompetitionId"] = game.CompetitionId;
+            ViewData["Team1Id"] = new SelectList(competition.Teams, "Id", "Name", game.Team1Id);
+            ViewData["Team2Id"] = new SelectList(competition.Teams, "Id", "Name", game.Team2Id);
+            return View(game);
+        }
+
+        // POST: Games/KnockoutEdit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> KnockoutEdit(int id, [Bind("Id,Team1Id,Team2Id,Team1Score,Team2Score,CompetitionId,Date,Stadium")] Game game)
+        {
+            if (id != game.Id)
+            {
+                return NotFound();
+            }
+
+            if (game.Team1Id == game.Team2Id)
+            {
+                ModelState.AddModelError(string.Empty, "A team cannot play against itself.");
+            }
+
+            var existingGame = _context.Games.FirstOrDefault(g =>
+                g.Id != game.Id &&
+                g.CompetitionId == game.CompetitionId &&
+                ((g.Team1Id == game.Team1Id && g.Team2Id == game.Team2Id) ||
+                 (g.Team1Id == game.Team2Id && g.Team2Id == game.Team1Id)));
+            if (existingGame != null)
+            {
+                ModelState.AddModelError(string.Empty, "A game between these two teams already exists.");
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    game.Team1Name = _context.Teams.Find(game.Team1Id)?.Name;
+                    game.Team2Name = _context.Teams.Find(game.Team2Id)?.Name;
+                    _context.Update(game);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!GameExists(game.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("KnockoutGames", "Home", new { competitionId = game.CompetitionId });
+            }
+
+            var competition = _context.Competitions.Include(c => c.Teams).FirstOrDefault(c => c.Id == game.CompetitionId);
+            if (competition == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["CompetitionId"] = game.CompetitionId;
+            ViewData["Team1Id"] = new SelectList(competition.Teams, "Id", "Name", game.Team1Id);
+            ViewData["Team2Id"] = new SelectList(competition.Teams, "Id", "Name", game.Team2Id);
+            return View(game);
+        }
+
+        // GET: Games/KnockoutDelete/5
+        public async Task<IActionResult> KnockoutDelete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var game = await _context.Games
+                .Include(g => g.Competition)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (game == null)
+            {
+                return NotFound();
+            }
+
+            return View(game);
+        }
+
+        // POST: Games/KnockoutDelete/5
+        [HttpPost, ActionName("KnockoutDelete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> KnockoutDeleteConfirmed(int id)
+        {
+            var game = await _context.Games.FindAsync(id);
+            _context.Games.Remove(game);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("KnockoutGames", "Home", new { competitionId = game.CompetitionId });
+        }
+
+        public async Task<IActionResult> LeagueDelete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var game = await _context.Games
+                .Include(g => g.Competition)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (game == null)
+            {
+                return NotFound();
+            }
+
+            return View(game);
+        }
+
+        // POST: Games/KnockoutDelete/5
+        [HttpPost, ActionName("LeagueDelete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LeagueDeleteConfirmed(int id)
+        {
+            var game = await _context.Games.FindAsync(id);
+            _context.Games.Remove(game);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("LeagueGames", "Home", new { competitionId = game.CompetitionId });
+        }
+
+
+
 
         private bool GameExists(int id)
         {

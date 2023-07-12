@@ -4,10 +4,9 @@
     ViewData["Title"] = "Home";
 }
 
-
-<h1>Welcume to the Competition Management System!</h1>
+<h1>Welcome to the Competition Management System!</h1>
 <div>
-    <a href="@Url.Action("Create", "Competitions")" class="btn btn-primary">Add Competition</a
+    <a href="@Url.Action("Create", "Competitions")" class="btn btn-primary">Add Competition</a>
 </div>
 
 <div class="card-deck">
@@ -19,6 +18,7 @@
                 <p class="card-text">Start Date: @competition.StartDate?.ToString("dd/MM/yyyy")</p>
                 <p class="card-text">End Date: @competition.EndDate?.ToString("dd/MM/yyyy")</p>
                 <p class="card-text">Competition Type: @competition.CompetitionTypeNavigation.Name</p>
+                <p class="card-text">Winner: @competition.WinnerName</p>
                 <div class="card-location">Location: @competition.Location</div> <!-- Wrap the location text in a separate div -->
             </div>
             <div class="card-footer">
@@ -31,4 +31,3 @@
         </div>
     }
 </div>
-

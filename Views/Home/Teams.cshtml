@@ -44,7 +44,7 @@
 <h2>View Games</h2>
 -->
 @{
-
+    
 
     if(Model.CompetitionType == 2)
     {
@@ -53,7 +53,12 @@
     }
     else
     {
-        <h2>NOT IMPLEMENTED, BLAME MIHAIL</h2>
+        if(Model.CompetitionType == 1)
+        {
+            <a class="btn btn-primary" href="@Url.Action("KnockoutGames", "Home", new { competitionId = Model.Id })">View Games</a>
+            <a class="btn btn-primary" href="@Url.Action("KnockoutLeaderboard", "Home", new { competitionId = Model.Id })">Leaderboard</a>
+		
+        }
     }
 
 }
