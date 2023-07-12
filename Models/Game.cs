@@ -52,4 +52,8 @@ public partial class Game
     [ForeignKey("Team2Id")]
     [InverseProperty("GameTeam2s")]
     public virtual Team? Team2 { get; set; }
+
+    [NotMapped]
+    public int? WinnerId => Team1Score > Team2Score ? Team1Id : Team2Score > Team1Score ? Team2Id : null;
+
 }

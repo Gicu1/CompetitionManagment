@@ -38,6 +38,30 @@
     </div>
     <button type="submit" class="btn btn-primary">Add Team</button>
 </form>
+
+<hr />
+<!--
+<h2>View Games</h2>
+-->
+@{
+
+
+    if(Model.CompetitionType == 2)
+    {
+        <a class="btn btn-primary" href="@Url.Action("LeagueGames", "Home", new { competitionId = Model.Id })">View Games</a>
+        <a class="btn btn-primary" href="@Url.Action("LeagueLeaderboard", "Home", new { competitionId = Model.Id })">Leaderboard</a>
+    }
+    else
+    {
+        <h2>NOT IMPLEMENTED, BLAME MIHAIL</h2>
+    }
+
+}
+<!--
+<a class="btn btn-primary" href="@Url.Action("LeagueGames", "Home", new { competitionId = Model.Id })">View Games</a>
+<a class="btn btn-primary" href="@Url.Action("LeagueLeaderboard", "Home", new { competitionId = Model.Id })">Leaderboard</a>
+-->
+
 <div>
     <a asp-action="Index" asp-controller="Home">Back</a>
 </div>

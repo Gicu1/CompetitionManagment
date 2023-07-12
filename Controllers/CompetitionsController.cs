@@ -155,6 +155,7 @@ namespace CompetitionManagment.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+
         private bool CompetitionExists(int id)
         {
           return (_context.Competitions?.Any(e => e.Id == id)).GetValueOrDefault();

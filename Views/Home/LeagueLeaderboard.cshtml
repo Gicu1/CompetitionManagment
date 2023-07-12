@@ -1,0 +1,26 @@
+﻿@model List<TeamScore>
+
+<h1>Leaderboard</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Team</th>
+            <th>Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (var i = 0; i < Model.Count; i++)
+        {
+            <tr>
+                <td>@(i + 1)</td>
+                <td>@Model[i].Team.Name</td>
+                <td>@Model[i].Score</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<a class="btn btn-primary" href="@Url.Action("Teams", "Home", new { competitionId = ViewData["CompetitionId"] })">Back</a>
