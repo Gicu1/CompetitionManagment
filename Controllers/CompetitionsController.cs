@@ -163,6 +163,8 @@ namespace CompetitionManagment.Controllers
             var competition = await _context.Competitions.FindAsync(id);
             if (competition != null)
             {
+                var games = _context.Games.Where(g => g.CompetitionId == id);
+                _context.Games.RemoveRange(games);
                 _context.Competitions.Remove(competition);
             }
             

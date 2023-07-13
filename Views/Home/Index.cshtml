@@ -23,9 +23,9 @@
             </div>
             <div class="card-footer">
                 <div class="btn-group">
-                    <a href="@Url.Action("Teams", "Home", new { competitionId = competition.Id })" class="btn btn-primary" style="color:lawngreen">View Teams</a>
-                    <a href="@Url.Action("Delete", "Competitions", new { competitionId = competition.Id })" class="btn btn-primary" style="color:orangered">Delete Competition</a>
-                    <a href="@Url.Action("Edit", "Competitions", new { competitionId = competition.Id })" class="btn btn-primary" color="yellow" style="color:yellow">Edit Competition</a>
+                    <a href="@Url.Action("Teams", "Home", new { competitionId = competition.Id })" class="btn btn-success" >Manage Competition</a>
+                    <a href="@Url.Action("Delete", "Competitions", new { competitionId = competition.Id })" class="btn btn-danger">Delete Competition</a>
+                    <a href="@Url.Action("Edit", "Competitions", new { competitionId = competition.Id })" class="btn btn-primary" >Edit Competition</a>
                 </div>
             </div>
         </div>

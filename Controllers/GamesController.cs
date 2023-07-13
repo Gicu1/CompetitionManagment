@@ -65,7 +65,8 @@ namespace CompetitionManagment.Controllers
                 Team2Name = _context.Teams.Find(team2Id)?.Name
             };
 
-            ViewData["CompetitionId"] = new SelectList(_context.Competitions, "Id", "Name", competitionId);
+            ViewData["CompetitionId"] = competitionId;
+            //ViewData["CompetitionId"] = new SelectList(_context.Competitions, "Id", "Name", competitionId);
             ViewData["Team1Id"] = new SelectList(_context.Teams, "Id", "Name", team1Id);
             ViewData["Team2Id"] = new SelectList(_context.Teams, "Id", "Name", team2Id);
             return View(game);
@@ -80,7 +81,8 @@ namespace CompetitionManagment.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LeagueCreate([Bind("Id,Team1Id,Team2Id,Team1Score,Team2Score,CompetitionId,Date,Stadium,Team1Name,Team2Name")] Game game)
         {
-            ViewData["CompetitionId"] = new SelectList(_context.Competitions, "Id", "Name", game.CompetitionId);
+            //ViewData["CompetitionId"] = new SelectList(_context.Competitions, "Id", "Name", game.CompetitionId);
+            ViewData["CompetitionId"] = game.CompetitionId;
             ViewData["Team1Id"] = new SelectList(_context.Teams, "Id", "Name", game.Team1Id);
             ViewData["Team2Id"] = new SelectList(_context.Teams, "Id", "Name", game.Team2Id);
             if (ModelState.IsValid)
@@ -208,11 +210,15 @@ namespace CompetitionManagment.Controllers
             {
                 return NotFound();
             }
+            var game = new Game
+            {
+                CompetitionId = competitionId
+            };
 
             ViewData["CompetitionId"] = competitionId;
             ViewData["Team1Id"] = new SelectList(competition.Teams, "Id", "Name");
             ViewData["Team2Id"] = new SelectList(competition.Teams, "Id", "Name");
-            return View();
+            return View(game);
         }
 
         // POST: Games/KnockoutCreate

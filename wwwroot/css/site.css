@@ -32,14 +32,14 @@ body {
 }
 
 .card-body {
-    margin-bottom: 40px;
+    margin-bottom: px;
 }
 
 .card-footer {
-    padding: 10px;
+    padding: 5px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-end;
+    justify-content: center;
 }
 
     .card-footer .btn {
@@ -68,6 +68,16 @@ body {
 }
 
 .btn-primary {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.btn-danger {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.btn-success {
     margin-top: 10px;
     margin-bottom: 10px;
 }
