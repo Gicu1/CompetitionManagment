@@ -85,6 +85,14 @@ namespace CompetitionManagment.Controllers
             ViewData["CompetitionId"] = game.CompetitionId;
             ViewData["Team1Id"] = new SelectList(_context.Teams, "Id", "Name", game.Team1Id);
             ViewData["Team2Id"] = new SelectList(_context.Teams, "Id", "Name", game.Team2Id);
+
+            var competition = _context.Competitions.Find(game.CompetitionId);
+            if (game.Date != null && competition.StartDate != null && competition.EndDate != null)
+                if (game.Date.Value.Date < competition.StartDate.Value.Date || game.Date.Value.Date > competition.EndDate.Value.Date)
+                {
+                ModelState.AddModelError("Date", "The game's date must be between the competition's start and end date");
+                }
+
             if (ModelState.IsValid)
             {
                 game.Team1Name = _context.Teams.Find(game.Team1Id)?.Name;
@@ -129,12 +137,20 @@ namespace CompetitionManagment.Controllers
                 return NotFound();
             }
 
+            var competition = _context.Competitions.Find(game.CompetitionId);
+            if (game.Date != null && competition.StartDate != null && competition.EndDate != null)
+                if (game.Date.Value.Date < competition.StartDate.Value.Date || game.Date.Value.Date > competition.EndDate.Value.Date)
+                {
+                ModelState.AddModelError("Date", "The game's date must be between the competition's start and end date");
+                }
+
             if (ModelState.IsValid)
             {
                 try
                 {
                     game.Team1Name = _context.Teams.Find(game.Team1Id)?.Name;
                     game.Team2Name = _context.Teams.Find(game.Team2Id)?.Name;
+                    
                     _context.Update(game);
                     await _context.SaveChangesAsync();
                 }
@@ -215,6 +231,7 @@ namespace CompetitionManagment.Controllers
                 CompetitionId = competitionId
             };
 
+
             ViewData["CompetitionId"] = competitionId;
             ViewData["Team1Id"] = new SelectList(competition.Teams, "Id", "Name");
             ViewData["Team2Id"] = new SelectList(competition.Teams, "Id", "Name");
@@ -239,6 +256,13 @@ namespace CompetitionManagment.Controllers
             {
                 ModelState.AddModelError(string.Empty, "A game between these two teams already exists.");
             }
+
+            var competition1 = _context.Competitions.Find(game.CompetitionId);
+            if (game.Date != null && competition1.StartDate != null && competition1.EndDate != null)
+                if (game.Date.Value.Date < competition1.StartDate.Value.Date || game.Date.Value.Date > competition1.EndDate.Value.Date)
+                {
+                ModelState.AddModelError("Date", "The game's date must be between the competition's start and end date");
+                }
 
             if (ModelState.IsValid)
             {
@@ -312,6 +336,12 @@ namespace CompetitionManagment.Controllers
             {
                 ModelState.AddModelError(string.Empty, "A game between these two teams already exists.");
             }
+            var competition1 = _context.Competitions.Find(game.CompetitionId);
+            if (game.Date != null && competition1.StartDate != null && competition1.EndDate != null)
+                if (game.Date.Value.Date < competition1.StartDate.Value.Date || game.Date.Value.Date > competition1.EndDate.Value.Date)
+                {
+                ModelState.AddModelError("Date", "The game's date must be between the competition's start and end date");
+                }
 
             if (ModelState.IsValid)
             {

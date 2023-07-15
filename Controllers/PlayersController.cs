@@ -38,9 +38,9 @@ namespace CompetitionManagment.Controllers
         }
 
         // GET: Players
-        public async Task<IActionResult> Index(int? id)
+        public async Task<IActionResult> Index(int? teamId)
         {
-            if (id == null)
+            if (teamId == null)
             {
                 var allPlayers = _context.Players.Include(p => p.Team);
                 ViewBag.Teams = new SelectList(_context.Teams, "Id", "Name");
@@ -49,7 +49,7 @@ namespace CompetitionManagment.Controllers
             else
             {
                 var playersInTeam = _context.Players
-                    .Where(p => p.TeamId == id)
+                    .Where(p => p.TeamId == teamId)
                     .Include(p => p.Team);
                 ViewBag.Teams = new SelectList(_context.Teams, "Id", "Name");
                 return View(await playersInTeam.ToListAsync());

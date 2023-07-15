@@ -65,6 +65,13 @@ namespace CompetitionManagment.Controllers
                     ViewData["CompetitionType"] = new SelectList(_context.Competitiontypes, "Id", "Name", competition.CompetitionType);
                     return View(competition);
                 }
+                var competitionInDb = _context.Competitions.FirstOrDefault(c => c.Name == competition.Name);
+                if (competitionInDb != null)
+                {
+                    ModelState.AddModelError("Name", "The competition name already exists.");
+                    ViewData["CompetitionType"] = new SelectList(_context.Competitiontypes, "Id", "Name", competition.CompetitionType);
+                    return View(competition);
+                }
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Home");
             }
@@ -120,8 +127,15 @@ namespace CompetitionManagment.Controllers
                 ViewData["CompetitionType"] = new SelectList(_context.Competitiontypes, "Id", "Name", competition.CompetitionType);
                 return View(competition);
             }
+            var competitionInDb = _context.Competitions.AsNoTracking().FirstOrDefault(c => c.Name == competition.Name);
+            if (competitionInDb != null && competitionInDb.Id != competition.Id)
+            {
+                ModelState.AddModelError("Name", "The competition name already exists.");
+                ViewData["CompetitionType"] = new SelectList(_context.Competitiontypes, "Id", "Name", competition.CompetitionType);
+                return View(competition);
+            }
             if (ModelState.IsValid)
-            {  
+            {
                 _context.Update(competition);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Home");

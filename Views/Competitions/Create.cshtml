@@ -14,16 +14,16 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" required/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StartDate" class="control-label"></label>
+                <label asp-for="StartDate" class="control-label">Start Date</label>
                 <input asp-for="StartDate" class="form-control" />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EndDate" class="control-label"></label>
+                <label asp-for="EndDate" class="control-label">End Date</label>
                 <input asp-for="EndDate" class="form-control" />
                 <span asp-validation-for="EndDate" class="text-danger" data-valmsg-for="EndDate" data-valmsg-replace="true"></span>
             </div>
@@ -33,7 +33,7 @@
                 <span asp-validation-for="Location" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CompetitionType" class="control-label"></label>
+                <label asp-for="CompetitionType" class="control-label">Competition Type</label>
                 <select asp-for="CompetitionType" class="form-control" asp-items="ViewBag.CompetitionType"></select>
             </div>
             <input type="hidden" asp-for="WinnerName" value="No Winner" />

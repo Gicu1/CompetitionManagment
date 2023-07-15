@@ -13,23 +13,23 @@
         <form asp-action="KnockoutCreate">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Team1Id" class="control-label"></label>
+                <label asp-for="Team1Id" class="control-label">Team 1 Id</label>
                 <select asp-for="Team1Id" class="form-control" asp-items="ViewBag.Team1Id"></select>
                 <span asp-validation-for="Team1Id" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Team2Id" class="control-label"></label>
+                <label asp-for="Team2Id" class="control-label">Team 2 Id</label>
                 <select asp-for="Team2Id" class="form-control" asp-items="ViewBag.Team2Id"></select>
                 <span asp-validation-for="Team2Id" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Team1Score" class="control-label"></label>
-                <input asp-for="Team1Score" class="form-control" />
+                <label asp-for="Team1Score" class="control-label">@Model.Team1Name Score</label>
+                <input asp-for="Team1Score" class="form-control" min="0"/>
                 <span asp-validation-for="Team1Score" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Team2Score" class="control-label"></label>
-                <input asp-for="Team2Score" class="form-control" />
+                <label asp-for="Team2Score" class="control-label">@Model.Team2Name Score</label>
+                <input asp-for="Team2Score" class="form-control" min="0"/>
                 <span asp-validation-for="Team2Score" class="text-danger"></span>
             </div>
             <!--
