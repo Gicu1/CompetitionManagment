@@ -6,7 +6,7 @@
 
 <h1>Games for @Model.Name</h1>
 
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>Team 1</th>
@@ -23,6 +23,7 @@
                 <td>
                     <a class="btn btn-primary" href="@Url.Action("KnockoutEdit", "Games", new { id = game.Id })">Edit Game</a>
                     <a class="btn btn-danger" href="@Url.Action("KnockoutDelete", "Games", new { id = game.Id })">Delete Game</a>
+                    <a class="btn btn-info" href="@Url.Action("KnockoutDetails", "Games", new { id = game.Id })">Details</a>
                 </td>
             </tr>
         }
@@ -32,5 +33,5 @@
 <a class="btn btn-success" href="@Url.Action("KnockoutCreate", "Games", new { competitionId = Model.Id })">Create Game</a>
 
 <div>
-    <a asp-action="Teams" asp-controller="Home" asp-route-competitionId="@Model.Id">Back to Teams</a>
+    <a asp-action="Teams" asp-controller="Home" asp-route-competitionId="@Model.Id" class="btn btn-warning">Back to Teams</a>
 </div>

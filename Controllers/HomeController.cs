@@ -123,11 +123,13 @@ namespace CompetitionManagment.Controllers
                     int score;
                     if (competition.CompetitionType == 1) // League
                     {
-                        score = CalculateTeamScore(team, competition.Id);
+                        var result = CalculateTeamScore(team, competition.Id);
+                        score = result.Score;
                     }
                     else // Knockout
                     {
-                        score = CalculateKnockoutTeamScore(team, competition.Id);
+                        var result = CalculateKnockoutTeamScore(team, competition.Id);
+                        score = result.Score;
                     }
 
                     teamScores.Add(new TeamScore { Team = team, Score = score });
@@ -182,7 +184,7 @@ namespace CompetitionManagment.Controllers
             foreach (var team in teams)
             {
                 var score = CalculateTeamScore(team, competitionId);
-                teamScores.Add(new TeamScore { Team = team, Score = score });
+                teamScores.Add(new TeamScore { Team = team, Score = score.Score, GoalsScored = score.GoalsScored, GoalsConceded = score.GoalsConceded });
             }
 
             teamScores = teamScores.OrderByDescending(ts => ts.Score).ToList();
@@ -190,13 +192,15 @@ namespace CompetitionManagment.Controllers
             return View(teamScores);
         }
 
-        private int CalculateTeamScore(Team team, int competitionId)
+        private (int Score, int GoalsScored, int GoalsConceded) CalculateTeamScore(Team team, int competitionId)
         {
             var games = team.GameTeam1s.Concat(team.GameTeam2s)
                 .Where(g => g.CompetitionId == competitionId)
                 .ToList();
 
             int score = 0;
+            int goalsScored = 0;
+            int goalsConceded = 0;
 
             foreach (var game in games)
             {
@@ -205,20 +209,48 @@ namespace CompetitionManagment.Controllers
                     if (game.Team1Id == team.Id && game.Team1Score > game.Team2Score)
                     {
                         score += 3; // Team 1 won the game
+                        goalsScored += game.Team1Score.Value;
+                        goalsConceded += game.Team2Score.Value;
                     }
                     else if (game.Team2Id == team.Id && game.Team2Score > game.Team1Score)
                     {
                         score += 3; // Team 2 won the game
+                        goalsScored += game.Team2Score.Value;
+                        goalsConceded += game.Team1Score.Value;
                     }
                     else if (game.Team1Score == game.Team2Score)
                     {
                         score += 1; // The game ended in a draw
+                        if (game.Team1Id == team.Id)
+                        {
+                            goalsScored += game.Team1Score.Value;
+                            goalsConceded += game.Team2Score.Value;
+                        }
+                        else
+                        {
+                            goalsScored += game.Team2Score.Value;
+                            goalsConceded += game.Team1Score.Value;
+                        }
+                    }
+                    else
+                    {
+                        if (game.Team1Id == team.Id)
+                        {
+                            goalsScored += game.Team1Score.Value;
+                            goalsConceded += game.Team2Score.Value;
+                        }
+                        else
+                        {
+                            goalsScored += game.Team2Score.Value;
+                            goalsConceded += game.Team1Score.Value;
+                        }
                     }
                 }
             }
 
-            return score;
+            return (score, goalsScored, goalsConceded);
         }
+
 
 
         public IActionResult KnockoutGames(int competitionId)
@@ -251,7 +283,7 @@ namespace CompetitionManagment.Controllers
             foreach (var team in teams)
             {
                 var score = CalculateKnockoutTeamScore(team, competitionId);
-                teamScores.Add(new TeamScore { Team = team, Score = score });
+                teamScores.Add(new TeamScore { Team = team, Score = score.Score, GoalsScored = score.GoalsScored, GoalsConceded = score.GoalsConceded });
             }
 
             teamScores = teamScores.OrderByDescending(ts => ts.Score).ToList();
@@ -259,13 +291,16 @@ namespace CompetitionManagment.Controllers
             return View(teamScores);
         }
 
-        private int CalculateKnockoutTeamScore(Team team, int competitionId)
+
+        private (int Score, int GoalsScored, int GoalsConceded) CalculateKnockoutTeamScore(Team team, int competitionId)
         {
             var games = team.GameTeam1s.Concat(team.GameTeam2s)
                 .Where(g => g.CompetitionId == competitionId)
                 .ToList();
 
             int score = 0;
+            int goalsScored = 0;
+            int goalsConceded = 0;
 
             foreach (var game in games)
             {
@@ -274,16 +309,35 @@ namespace CompetitionManagment.Controllers
                     if (game.Team1Id == team.Id && game.Team1Score > game.Team2Score)
                     {
                         score += 1; // Team 1 won the game
+                        goalsScored += game.Team1Score.Value;
+                        goalsConceded += game.Team2Score.Value;
                     }
                     else if (game.Team2Id == team.Id && game.Team2Score > game.Team1Score)
                     {
                         score += 1; // Team 2 won the game
+                        goalsScored += game.Team2Score.Value;
+                        goalsConceded += game.Team1Score.Value;
+                    }
+                    else
+                    {
+                        if (game.Team1Id == team.Id)
+                        {
+                            goalsScored += game.Team1Score.Value;
+                            goalsConceded += game.Team2Score.Value;
+                        }
+                        else
+                        {
+                            goalsScored += game.Team2Score.Value;
+                            goalsConceded += game.Team1Score.Value;
+                        }
                     }
                 }
             }
 
-            return score;
+            return (score, goalsScored, goalsConceded);
         }
+
+
 
 
         public IActionResult Privacy()

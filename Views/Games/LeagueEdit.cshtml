@@ -43,14 +43,14 @@
                 <span asp-validation-for="Stadium" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-success" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="LeagueGames" asp-controller="Home" asp-route-competitionId="@Model.CompetitionId">Back to Games</a>
+    <a asp-action="LeagueGames" asp-controller="Home" asp-route-competitionId="@Model.CompetitionId" class="btn btn-warning">Back to Games</a>
 </div>
 
 

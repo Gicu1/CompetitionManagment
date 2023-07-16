@@ -31,7 +31,7 @@ namespace CompetitionManagment.Controllers
         }
 
         // GET: Games/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> KnockoutDetails(int? id)
         {
             if (id == null || _context.Games == null)
             {
@@ -51,6 +51,28 @@ namespace CompetitionManagment.Controllers
 			ViewData["Team1Id"] = new SelectList(_context.Teams, "Id", "Name", game.Team1Id);
 			ViewData["Team2Id"] = new SelectList(_context.Teams, "Id", "Name", game.Team2Id);
 			return View(game);
+        }
+
+        public async Task<IActionResult> LeagueDetails(int? id)
+        {
+            if (id == null || _context.Games == null)
+            {
+                return NotFound();
+            }
+
+            var game = await _context.Games
+                .Include(g => g.Competition)
+                .Include(g => g.Team1)
+                .Include(g => g.Team2)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (game == null)
+            {
+                return NotFound();
+            }
+            ViewData["CompetitionId"] = new SelectList(_context.Competitions, "Id", "Name", game.CompetitionId);
+            ViewData["Team1Id"] = new SelectList(_context.Teams, "Id", "Name", game.Team1Id);
+            ViewData["Team2Id"] = new SelectList(_context.Teams, "Id", "Name", game.Team2Id);
+            return View(game);
         }
 
         // GET: Games/Create

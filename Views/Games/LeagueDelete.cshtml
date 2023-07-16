@@ -27,7 +27,7 @@
 
     <form asp-action="LeagueDelete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="LeagueGames" asp-controller="Home" asp-route-competitionId="@Model.CompetitionId">Cancel</a>
+        <input type="submit" value="Delete" class="btn btn-danger" /> 
+        <a asp-action="LeagueGames" asp-controller="Home" asp-route-competitionId="@Model.CompetitionId" class="btn btn-warning">Cancel</a>
     </form>
 </div>

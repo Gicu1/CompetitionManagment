@@ -36,7 +36,7 @@
             }
         </select>
     </div>
-    <button type="submit" class="btn btn-primary">Add Team</button>
+    <button type="submit" class="btn btn-success">Add Team</button>
 </form>
 
 <hr />
@@ -48,14 +48,14 @@
 
     if(Model.CompetitionType == 2)
     {
-        <a class="btn btn-primary" href="@Url.Action("LeagueGames", "Home", new { competitionId = Model.Id })">View Games</a>
+        <a class="btn btn-info" href="@Url.Action("LeagueGames", "Home", new { competitionId = Model.Id })">View Games</a>
         <a class="btn btn-primary" href="@Url.Action("LeagueLeaderboard", "Home", new { competitionId = Model.Id })">Leaderboard</a>
     }
     else
     {
         if(Model.CompetitionType == 1)
         {
-            <a class="btn btn-primary" href="@Url.Action("KnockoutGames", "Home", new { competitionId = Model.Id })">View Games</a>
+            <a class="btn btn-info" href="@Url.Action("KnockoutGames", "Home", new { competitionId = Model.Id })">View Games</a>
             <a class="btn btn-primary" href="@Url.Action("KnockoutLeaderboard", "Home", new { competitionId = Model.Id })">Leaderboard</a>
 		
         }
@@ -68,5 +68,5 @@
 -->
 
 <div>
-    <a asp-action="Index" asp-controller="Home">Back</a>
+    <a asp-action="Index" asp-controller="Home" class="btn btn-warning">Back</a>
 </div>

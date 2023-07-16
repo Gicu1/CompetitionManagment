@@ -7,26 +7,44 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CompetitionManagment.styles.css" asp-append-version="true" />
+    <style>
+        .full-page-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-color: #e5e5f7;
+            opacity: 0.1;
+            background: 
+            linear-gradient(135deg, #b5b34955 25%, transparent 25%) -7px 0/ 14px 14px, 
+            linear-gradient(225deg, #b5b349 25%, transparent 25%) -7px 0/ 14px 14px, 
+            linear-gradient(315deg, #b5b34955 25%, transparent 25%) 0px 0/ 14px 14px, 
+            linear-gradient(45deg, #b5b349 25%, #e5e5f7 25%) 0px 0/ 14px 14px;
+        }
+    </style>
 </head>
 <body>
+    <div class="full-page-background"></div>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom box-shadow mb-3 navbar-custom p-0">  
+            <div class="container-fluid" style="height:100%">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CompetitionManagement</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between" style="height:100%">
+                    <ul class="navbar-nav flex-grow-1" style="height:100%">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index" style="color:#ffffff">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Team" asp-action="Index">Teams</a>
+                            <a class="nav-link" asp-area="" asp-controller="Team" asp-action="Index" style="color:#ffffff">Teams</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Players" asp-action="ViewPlayers">Players</a>
+                            <a class="nav-link" asp-area="" asp-controller="Players" asp-action="ViewPlayers" style="color:#ffffff">Players</a>
                         </li>
                     </ul>
                 </div>

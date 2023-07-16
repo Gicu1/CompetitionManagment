@@ -14,7 +14,7 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
 }
 
 .card-deck {
@@ -67,20 +67,93 @@ body {
     margin-bottom: 20px;
 }
 
+
 .btn-primary {
     margin-top: 10px;
     margin-bottom: 10px;
+    background-color: #2a35ce;
+    border-color: #4950b5;
 }
+    .btn-primary:hover {
+        color: white;
+        transition: 0.1s;
+        box-shadow: 0px 0px 10px 4px white;
+        opacity: 20;
+        transform: scale(1.01);
+        background-color: #4950b5;
+        border-color: #4950b5;
+    }
+
 
 .btn-danger {
     margin-top: 10px;
     margin-bottom: 10px;
+    background-color: #ce2a2f;
+    border-color: #b5494d;
 }
+
+    .btn-danger:hover {
+        color: white;
+        transition: 0.1s;
+        box-shadow: 0px 0px 10px 4px white;
+        opacity: 20;
+        transform: scale(1.01);
+        background-color: #b5494d;
+        border-color: #b5494d;
+    }
+
 
 .btn-success {
     margin-top: 10px;
     margin-bottom: 10px;
+    background-color: #2fce2a;
+    border-color: #4db549;
 }
+
+    .btn-success:hover {
+        color: white;
+        transition: 0.1s;
+        box-shadow: 0px 0px 10px 4px white;
+        opacity: 20;
+        transform: scale(1.01);
+        background-color: #4db549;
+        border-color: #4db549;
+    }
+    
+
+.btn-info {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: #c92ace;
+    border-color: #b149b5;
+    color: white;
+}
+
+    .btn-info:hover {
+        color: white;
+        transition: 0.1s;
+        box-shadow: 0px 0px 10px 4px white;
+        opacity: 20;
+        transform: scale(1.01);
+        background-color: #b149b5;
+        border-color: #b149b5;
+    }
+
+
+.btn-warning {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+    .btn-warning:hover {
+        color: white;
+        transition: 0.1s;
+        box-shadow: 0px 0px 10px 4px white;
+        opacity: 20;
+        transform: scale(1.01);
+    }
+
+
     
 .btn-group {
     display: flex;
@@ -89,3 +162,46 @@ body {
 }
 
 
+.navbar-nav {
+    height: 100%;
+}
+
+.nav-item {
+    display: flex;
+    align-items: stretch;
+}
+
+.navbar {
+    height: 50px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(to top, transparent 50%, #b5b349 50%);
+    background-size: 100% 200%;
+    background-position: bottom;
+    transition: background-position 0.1s;
+
+}
+
+    .nav-link:hover {
+        background-position: top;
+    }
+
+.nav-item {
+    color: white;
+}
+
+    .nav-item:hover {
+        color: #e6b8b8;
+    }
+
+
+
+.nav-link-custom {
+    color: #fcdfe5;
+}
+
+
+    

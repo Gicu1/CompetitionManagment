@@ -7,11 +7,11 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary btn-xs">Create New</a>
 </p>
 
 
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>
@@ -45,16 +45,15 @@
                 @Html.DisplayFor(modelItem => item.Team.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success btn-xs">Edit</a> 
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-xs">Details</a> 
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-xs">Delete</a>
             </td>
         </tr>
 }
     </tbody>
-    <tr>
-        <td>
-            <a asp-controller="Team" asp-action="Index">Back to Teams</a>
-        </td>
-    </tr>
+
 </table>
+<div>
+    <a asp-controller="Team" asp-action="Index" class="btn btn-warning">Back to Teams</a>
+</div>
