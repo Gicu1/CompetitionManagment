@@ -32,6 +32,12 @@ namespace CompetitionManagment.Controllers
                 ModelState.AddModelError("CreatedOn", "The date cannot be in the future.");
             }
 
+            var teamInDb = _context.Teams.FirstOrDefault(t => t.Name == team.Name);
+            if (teamInDb != null)
+            {
+                ModelState.AddModelError("Name", "The team name already exists.");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Teams.Add(team);
@@ -60,7 +66,11 @@ namespace CompetitionManagment.Controllers
             {
                 ModelState.AddModelError("CreatedOn", "The date cannot be in the future.");
             }
-
+            var teamInDb = _context.Teams.AsNoTracking().FirstOrDefault(t => t.Name == team.Name);
+            if (teamInDb != null && teamInDb.Id != team.Id)
+            {
+                ModelState.AddModelError("Name", "The team name already exists.");
+            }
             if (ModelState.IsValid)
             {
                 _context.Entry(team).State = EntityState.Modified;

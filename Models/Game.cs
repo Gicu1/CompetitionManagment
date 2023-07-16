@@ -33,6 +33,14 @@ public partial class Game
     [Unicode(false)]
     public string? Stadium { get; set; }
 
+    [StringLength(255)]
+    [Unicode(false)]
+    public string? Team1Name { get; set; }
+
+    [StringLength(255)]
+    [Unicode(false)]
+    public string? Team2Name { get; set; }
+
     [ForeignKey("CompetitionId")]
     [InverseProperty("Games")]
     public virtual Competition? Competition { get; set; }
@@ -44,4 +52,8 @@ public partial class Game
     [ForeignKey("Team2Id")]
     [InverseProperty("GameTeam2s")]
     public virtual Team? Team2 { get; set; }
+
+    [NotMapped]
+    public int? WinnerId => Team1Score > Team2Score ? Team1Id : Team2Score > Team1Score ? Team2Id : null;
+
 }

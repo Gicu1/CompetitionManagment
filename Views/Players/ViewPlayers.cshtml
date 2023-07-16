@@ -1,0 +1,70 @@
+﻿@model IEnumerable<CompetitionManagment.Models.Player>
+
+@{
+    ViewData["Title"] = "ViewPlayers";
+}
+
+<h1>ViewPlayers</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary btn-xs">Create New</a>
+</p>
+
+<form method="get">
+    <label for="teamId">Team:</label>
+    <select id="teamId" name="id" onchange="location.href = this.value ? '/Players/ViewPlayers/' + this.value : '/Players/ViewPlayers'">
+        <option value="">All</option>
+        @foreach (var item in ViewBag.Teams)
+        {
+            var selected = item.Value == ViewContext.RouteData.Values["id"]?.ToString();
+            <option value="@item.Value" selected="@selected">@item.Text</option>
+        }
+    </select>
+</form>
+
+
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Age)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Team)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Age)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Team.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success btn-xs">Edit</a> 
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-xs">Details</a> 
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-xs">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

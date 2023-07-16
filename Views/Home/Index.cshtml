@@ -1,8 +1,33 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model List<CompetitionManagment.Models.Competition>
+
+@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcume</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<h1>Welcome to the Competition Management System!</h1>
+<div>
+    <a href="@Url.Action("Create", "Competitions")" class="btn btn-primary">Add Competition</a>
+</div>
+
+<div class="card-deck">
+    @foreach (var competition in Model)
+    {
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">@competition.Name</h5>
+                <p class="card-text">Start Date: @competition.StartDate?.ToString("dd/MM/yyyy")</p>
+                <p class="card-text">End Date: @competition.EndDate?.ToString("dd/MM/yyyy")</p>
+                <p class="card-text">Competition Type: @competition.CompetitionTypeNavigation.Name</p>
+                <p class="card-text">Winner: @competition.WinnerName</p>
+                <div class="card-location">Location: @competition.Location</div> <!-- Wrap the location text in a separate div -->
+            </div>
+            <div class="card-footer">
+                <div class="btn-group">
+                    <a href="@Url.Action("Teams", "Home", new { competitionId = competition.Id })" class="btn btn-info" >Manage Competition</a>
+                    <a href="@Url.Action("Delete", "Competitions", new { competitionId = competition.Id })" class="btn btn-danger">Delete Competition</a>
+                    <a href="@Url.Action("Edit", "Competitions", new { competitionId = competition.Id })" class="btn btn-success" >Edit Competition</a>
+                </div>
+            </div>
+        </div>
+    }
 </div>

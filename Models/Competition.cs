@@ -18,9 +18,13 @@ public partial class Competition
     public string? Name { get; set; }
 
     [Column(TypeName = "date")]
+    [DataType(DataType.Date)]
+    [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
     public DateTime? StartDate { get; set; }
 
     [Column(TypeName = "date")]
+    [DataType(DataType.Date)]
+    [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
     public DateTime? EndDate { get; set; }
 
     [StringLength(255)]
@@ -39,4 +43,13 @@ public partial class Competition
     [ForeignKey("CompetitionId")]
     [InverseProperty("Competitions")]
     public virtual ICollection<Team> Teams { get; set; } = new List<Team>();
+
+    [NotMapped] // This property will not be mapped to the database
+    public List<Team> AllTeams { get; set; } = new List<Team>();
+
+    [NotMapped] // This property will not be mapped to the database
+    public int? WinnerId { get; set; }
+
+    [NotMapped] // This property will not be mapped to the database
+    public string WinnerName { get; set; }
 }

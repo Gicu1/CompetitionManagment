@@ -22,11 +22,11 @@ public partial class Team
     [StringLength(255)]
     [Unicode(false)]
     public string? Motto { get; set; }
-    
-    [Column(TypeName = "date")]
-    [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
-    public DateTime? CreatedOn { get; set; }
 
+    [Column(TypeName = "date")]
+    [DataType(DataType.Date)]
+    [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+    public DateTime? CreatedOn { get; set; }
 
     [InverseProperty("Team1")]
     public virtual ICollection<Game> GameTeam1s { get; set; } = new List<Game>();

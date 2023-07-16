@@ -1,0 +1,74 @@
+﻿@model CompetitionManagment.Models.Game
+
+@{
+    ViewData["Title"] = "KnockoutCreate";
+}
+
+<h1>KnockoutCreate</h1>
+
+<h4>Game</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="KnockoutCreate">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Team1Id" class="control-label">Team 1 Id</label>
+                <select asp-for="Team1Id" class="form-control" asp-items="ViewBag.Team1Id"></select>
+                <span asp-validation-for="Team1Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Team2Id" class="control-label">Team 2 Id</label>
+                <select asp-for="Team2Id" class="form-control" asp-items="ViewBag.Team2Id"></select>
+                <span asp-validation-for="Team2Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Team1Score" class="control-label">Team 1 Score</label>
+                <input asp-for="Team1Score" class="form-control" min="0"/>
+                <span asp-validation-for="Team1Score" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Team2Score" class="control-label">Team 2 Score</label>
+                <input asp-for="Team2Score" class="form-control" min="0"/>
+                <span asp-validation-for="Team2Score" class="text-danger"></span>
+            </div>
+            <!--
+            <div class="form-group">
+                <label asp-for="CompetitionId" class="control-label"></label>
+                <input asp-for="CompetitionId" class="form-control" readonly />
+                <span asp-validation-for="CompetitionId" class="text-danger"></span>
+            </div>
+            -->
+            <input type="hidden" asp-for="CompetitionId"  />
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Stadium" class="control-label"></label>
+                <input asp-for="Stadium" class="form-control" />
+                <span asp-validation-for="Stadium" class="text-danger"></span>
+            </div>
+            <!--
+            <div class="form-group">
+                <label asp-for="Team1Name" class="control-label"></label>
+                <input asp-for="Team1Name" class="form-control" readonly />
+                <span asp-validation-for="Team1Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Team2Name" class="control-label"></label>
+                <input asp-for="Team2Name" class="form-control" readonly />
+                <span asp-validation-for="Team2Name" class="text-danger"></span>
+            </div>
+            -->
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="KnockoutGames" asp-controller="Home" asp-route-competitionId="@Model.CompetitionId" class="btn btn-warning">Back to Games</a>
+</div>

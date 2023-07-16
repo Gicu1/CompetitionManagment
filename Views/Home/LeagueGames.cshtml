@@ -1,0 +1,66 @@
+﻿@model CompetitionManagment.Models.Competition
+
+@{
+    ViewData["Title"] = "Games";
+}
+
+<h1>Games for @Model.Name</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Team 1</th>
+            <th>Team 2</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var team1 in Model.Teams)
+        {
+            var otherTeams = Model.Teams.Except(new List<Team> { team1 });
+
+            @foreach (var team2 in otherTeams)
+            {
+                var game = Model.Games.FirstOrDefault(g =>
+                (g.Team1Id == team1.Id && g.Team2Id == team2.Id));
+
+                if (game == null)
+                {
+                    // Check if the reverse game exists
+                    var reverseGame = Model.Games.FirstOrDefault(g =>
+                    (g.Team1Id == team2.Id && g.Team2Id == team1.Id));
+
+                    if (reverseGame != null)
+                    {
+                        // Reverse game exists, so skip this iteration
+                        continue;
+                    }
+                }
+
+                // Display the game or create button
+                <tr>
+                    <td>@team1.Name</td>
+                    <td>@team2.Name</td>
+                    <td>
+                        @if (game != null)
+                        {
+                            <a class="btn btn-primary" href="@Url.Action("LeagueEdit", "Games", new { id = game.Id })">Edit Game</a>
+                            <a class="btn btn-danger" href="@Url.Action("LeagueDelete", "Games", new { id = game.Id })">Delete Game</a>
+                            <a class="btn btn-info" href="@Url.Action("LeagueDetails", "Games", new { id = game.Id })">Details</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-success" href="@Url.Action("LeagueCreate", "Games", new { competitionId = Model.Id, team1Id = team1.Id, team2Id = team2.Id })">Create Game</a>
+                        }
+                    </td>
+                </tr>
+            }
+
+
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="Teams" asp-controller="Home" asp-route-competitionId="@Model.Id" class="btn btn-warning">Back to Teams</a>
+</div>

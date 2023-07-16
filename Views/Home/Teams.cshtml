@@ -1,0 +1,72 @@
+﻿@model CompetitionManagment.Models.Competition
+
+@{
+    ViewData["Title"] = "Teams";
+}
+
+<h1>Teams Participating in @Model.Name</h1>
+
+<ul>
+    @foreach (var team in Model.Teams)
+    {
+        <li>
+            @team.Name
+            <form method="post" action="@Url.Action("DeleteTeam", "Home")">
+                <input type="hidden" name="teamId" value="@team.Id" />
+                <input type="hidden" name="competitionId" value="@Model.Id" />
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </li>
+    }
+</ul>
+
+<hr />
+
+<h2>Add Team</h2>
+
+<form method="post" action="@Url.Action("AddTeam", "Home")">
+    <input type="hidden" name="competitionId" value="@Model.Id" />
+    <div class="form-group">
+        <label for="teamId">Select a Team:</label>
+        <select class="form-control" id="teamId" name="teamId">
+            <option value="">-- Select Team --</option>
+            @foreach (var team in Model.AllTeams)
+            {
+                <option value="@team.Id">@team.Name</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-success">Add Team</button>
+</form>
+
+<hr />
+<!--
+<h2>View Games</h2>
+-->
+@{
+    
+
+    if(Model.CompetitionType == 2)
+    {
+        <a class="btn btn-info" href="@Url.Action("LeagueGames", "Home", new { competitionId = Model.Id })">View Games</a>
+        <a class="btn btn-primary" href="@Url.Action("LeagueLeaderboard", "Home", new { competitionId = Model.Id })">Leaderboard</a>
+    }
+    else
+    {
+        if(Model.CompetitionType == 1)
+        {
+            <a class="btn btn-info" href="@Url.Action("KnockoutGames", "Home", new { competitionId = Model.Id })">View Games</a>
+            <a class="btn btn-primary" href="@Url.Action("KnockoutLeaderboard", "Home", new { competitionId = Model.Id })">Leaderboard</a>
+		
+        }
+    }
+
+}
+<!--
+<a class="btn btn-primary" href="@Url.Action("LeagueGames", "Home", new { competitionId = Model.Id })">View Games</a>
+<a class="btn btn-primary" href="@Url.Action("LeagueLeaderboard", "Home", new { competitionId = Model.Id })">Leaderboard</a>
+-->
+
+<div>
+    <a asp-action="Index" asp-controller="Home" class="btn btn-warning">Back</a>
+</div>
