@@ -58,7 +58,6 @@ body {
     text-overflow: ellipsis;
 }
 
-/* Optional: Adjust card size */
 .card-deck .card {
     width: 350px; /* Adjust the desired width for the cards */
     display: flex;
@@ -67,13 +66,13 @@ body {
     margin-bottom: 20px;
 }
 
-
 .btn-primary {
     margin-top: 10px;
     margin-bottom: 10px;
     background-color: #2a35ce;
     border-color: #4950b5;
 }
+
     .btn-primary:hover {
         color: white;
         transition: 0.1s;
@@ -83,7 +82,6 @@ body {
         background-color: #4950b5;
         border-color: #4950b5;
     }
-
 
 .btn-danger {
     margin-top: 10px;
@@ -102,7 +100,6 @@ body {
         border-color: #b5494d;
     }
 
-
 .btn-success {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -118,8 +115,7 @@ body {
         transform: scale(1.01);
         background-color: #4db549;
         border-color: #4db549;
-    }
-    
+    } 
 
 .btn-info {
     margin-top: 10px;
@@ -139,7 +135,6 @@ body {
         border-color: #b149b5;
     }
 
-
 .btn-warning {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -152,15 +147,12 @@ body {
         opacity: 20;
         transform: scale(1.01);
     }
-
-
     
 .btn-group {
     display: flex;
     align-content: center;
     justify-content: center;
 }
-
 
 .navbar-nav {
     height: 100%;
@@ -181,13 +173,28 @@ body {
     background: linear-gradient(to top, transparent 50%, #b5b349 50%);
     background-size: 100% 200%;
     background-position: bottom;
-    transition: background-position 0.1s;
+    transition: background-position 0.3s;
 
 }
 
     .nav-link:hover {
         background-position: top;
     }
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(to top, transparent 50%, #b5b349 50%);
+    background-size: 100% 200%;
+    background-position: bottom;
+    transition: background-position 0.3s;
+    height:100%;
+}
+
+    .navbar-brand:hover {
+        background-position: top;
+    }
+
 
 .nav-item {
     color: white;
@@ -197,11 +204,16 @@ body {
         color: #e6b8b8;
     }
 
-
-
 .nav-link-custom {
     color: #fcdfe5;
 }
-
-
     
+.form-control {
+    background-color: #f3f3f3;
+}
+
+    .form-control:focus {
+        background-color: #f7f7f7;
+        border-color: #727272;
+        box-shadow: none;
+    }

@@ -82,20 +82,29 @@ namespace CompetitionManagment.Controllers
             return View();
         }
 
-        // POST: Players/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Age,TeamId")] Player player)
+        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Age,TeamId,PictureFile")] Player player)
         {
             if (ModelState.IsValid)
             {
+                // Get the uploaded file
+                var pictureFile = player.PictureFile;
+                if (pictureFile != null && pictureFile.Length > 0)
+                {
+                    // Read the file data into a byte array
+                    using (var stream = new MemoryStream())
+                    {
+                        await pictureFile.CopyToAsync(stream);
+                        player.Picture = stream.ToArray();
+                    }
+                }
+
                 _context.Add(player);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index), new { id = player.TeamId });
             }
-            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Id", player.TeamId);
+            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Name", player.TeamId);
             return View(player);
         }
 
@@ -121,7 +130,7 @@ namespace CompetitionManagment.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Age,TeamId")] Player player)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Age,TeamId,PictureFile")] Player player)
         {
             if (id != player.Id)
             {
@@ -132,7 +141,28 @@ namespace CompetitionManagment.Controllers
             {
                 try
                 {
-                    _context.Update(player);
+                    // Get the current player from the database
+                    var currentPlayer = await _context.Players.FindAsync(id);
+
+                    // Get the uploaded file
+                    var pictureFile = player.PictureFile;
+                    if (pictureFile != null && pictureFile.Length > 0)
+                    {
+                        // Read the file data into a byte array
+                        using (var stream = new MemoryStream())
+                        {
+                            await pictureFile.CopyToAsync(stream);
+                            currentPlayer.Picture = stream.ToArray();
+                        }
+                    }
+
+                    // Update the other properties of the current player
+                    currentPlayer.FirstName = player.FirstName;
+                    currentPlayer.LastName = player.LastName;
+                    currentPlayer.Age = player.Age;
+                    currentPlayer.TeamId = player.TeamId;
+
+                    _context.Update(currentPlayer);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -148,9 +178,12 @@ namespace CompetitionManagment.Controllers
                 }
                 return RedirectToAction(nameof(Index), new { id = player.TeamId });
             }
-            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Id", player.TeamId);
+            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Name", player.TeamId);
             return View(player);
         }
+
+
+
 
         // GET: Players/Delete/5
         public async Task<IActionResult> Delete(int? id)

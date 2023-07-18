@@ -18,13 +18,13 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartDate)
+            Start Date
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.StartDate)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EndDate)
+            End Date
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.EndDate)
@@ -36,7 +36,7 @@
             @Html.DisplayFor(model => model.Location)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CompetitionType)
+            Competition Type
         </dt>
         <dd class="col-sm-10">
             @if (Model.CompetitionTypeNavigation != null)
@@ -53,7 +53,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index" asp-controller="Home" class="btn btn-warning btn-xs">>Back Home</a>
+        <input type="submit" value="Delete" class="btn btn-danger" /> 
+        <a asp-action="Index" asp-controller="Home" class="btn btn-warning btn-xs">Back Home</a>
     </form>
 </div>

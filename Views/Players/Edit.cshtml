@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -33,6 +33,18 @@
                 <select asp-for="TeamId" class="form-control" asp-items="ViewBag.TeamId"></select>
                 <span asp-validation-for="TeamId" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label for="PictureFile" class="control-label">Picture</label>
+                <input type="file" id="PictureFile" name="PictureFile" accept="image/*" class="form-control" />
+            </div>
+            @if (Model.Picture != null)
+            {
+                <div class="form-group">
+                    <label>Current Picture</label>
+                    <img src="@($"data:image;base64,{Convert.ToBase64String(Model.Picture)}")" alt="Player Picture" class="img-thumbnail" />
+                </div>
+            }
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-success" />
             </div>
