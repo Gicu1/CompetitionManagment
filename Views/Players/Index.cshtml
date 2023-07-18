@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Players</h1>
 
 <p>
     <a asp-action="Create" class="btn btn-primary btn-xs">Create New</a>
@@ -15,10 +15,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+                Picture
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
+                First Name
+            </th>
+            <th>
+                Last Name
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Age)
@@ -32,6 +35,12 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @if (item.Picture != null)
+                {
+                   <img src="@($"data:image;base64,{Convert.ToBase64String(item.Picture)}")" alt="Player Picture" class="img-thumbnail" style="max-width: 64px; max-height: 64px;" />
+                }
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FirstName)
             </td>
